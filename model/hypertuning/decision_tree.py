@@ -13,6 +13,7 @@ import optuna
 from config import CONFIG_MODEL
 from utils import get_pred
 
+
 def get_optuna_dt_params(trial: optuna.Trial) -> Dict[str, Any]:
     params = {
         # Core & Criterion
@@ -34,6 +35,7 @@ def get_optuna_dt_params(trial: optuna.Trial) -> Dict[str, Any]:
     }
     
     return params
+
 
 def optimize_dt(train_df: pd.DataFrame, 
                 val_df: pd.DataFrame, 
@@ -61,7 +63,7 @@ def optimize_dt(train_df: pd.DataFrame,
 
         final_preds = get_pred(preds, limit, approach_type)
         
-        rmse = np.sqrt(mean_squared_error(val_df[target_col], final_preds))
+        rmse = np.sqrt(mean_squared_error(val_df["TC_HOANTHANH"], final_preds))
         return rmse
 
     study = optuna.create_study(
