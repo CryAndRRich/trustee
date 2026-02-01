@@ -70,7 +70,7 @@ def optimize_dt(train_df: pd.DataFrame,
     )
     
     with tqdm(total=n_trial, desc=f"Decision Tree {model_type} Tuning - Mode: {approach_type}") as pbar:
-        def tqdm_callback(study):
+        def tqdm_callback(study, trial):
             pbar.update(1)
             pbar.set_postfix({"Best RMSE": f"{study.best_value:.4f}"})
     
