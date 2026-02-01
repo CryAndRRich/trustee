@@ -11,11 +11,13 @@ def test_model(model_name: str,
         model_name: Tên mô hình ("Decision Tree", "Random Forest", "XGBoost", "LightGBM")
         **kwargs: Các tham số truyền vào hàm train
             - params: Tham số mô hình
+            - best_iter: Số vòng lặp tốt nhất
             - full_train_df: Tập dữ liệu huấn luyện đầy đủ
             - train_df: Tập dữ liệu huấn luyện ban đầu
             - test_df: Tập dữ liệu kiểm tra
             - feats: Danh sách các cột đặc trưng
             - target_cols: Cột mục tiêu
+            - save_dir: Thư mục lưu model
             - model_type: Tên loại mô hình ("Fresher", "Senior")
             - approach_type: Phương pháp tiếp cận ("Credits", "Gap", "Ratio")
 

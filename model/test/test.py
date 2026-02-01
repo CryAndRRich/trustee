@@ -50,11 +50,13 @@ def _save_model(model: Any,
 
 
 def test_dt(params: Dict[str, Any], 
+            best_iter: int,
             full_train_df: pd.DataFrame, 
             train_df: pd.DataFrame, 
             test_df: pd.DataFrame, 
             feats: List[str], 
             target_col: str,
+            save_dir: str,
             model_type: str = "Fresher",
             approach_type: str = "Credits") -> np.ndarray:
     print(f"Testing Decision Tree {model_type} - Mode: {approach_type}...")
@@ -66,7 +68,7 @@ def test_dt(params: Dict[str, Any],
         full_train_df[target_col]
     )
     
-    _save_model(model, f"decision_tree_{model_type.lower()}", "joblib")
+    _save_model(model, f"decision_tree_{model_type.lower()}", save_dir, "joblib")
     
     preds = model.predict(test_df[feats])
     limit = test_df["TC_DANGKY"].to_numpy()
@@ -82,6 +84,7 @@ def test_rf(params: Dict[str, Any],
             test_df: pd.DataFrame, 
             feats: List[str], 
             target_col: str,
+            save_dir: str,
             model_type: str = "Fresher",
             approach_type: str = "Credits") -> np.ndarray:
     print(f"Testing Random Forest {model_type} - Mode: {approach_type}...")
@@ -97,7 +100,7 @@ def test_rf(params: Dict[str, Any],
         full_train_df[target_col]
     )
     
-    _save_model(model, f"random_forest_{model_type.lower()}", "joblib")
+    _save_model(model, f"random_forest_{model_type.lower()}", save_dir,"joblib")
     
     preds = model.predict(test_df[feats])
     limit = test_df["TC_DANGKY"].to_numpy()
@@ -113,6 +116,7 @@ def test_xgb(params: Dict[str, Any],
              test_df: pd.DataFrame, 
              feats: List[str], 
              target_col: str,
+             save_dir: str,
              model_type: str,
              approach_type: str = "Credits") -> np.ndarray:
     print(f"Testing XGBoost {model_type} - Mode: {approach_type}...")
@@ -131,7 +135,7 @@ def test_xgb(params: Dict[str, Any],
         verbose=0
     )
 
-    _save_model(model, f"xgboost_{model_type.lower()}", "json")
+    _save_model(model, f"xgboost_{model_type.lower()}", save_dir,"json")
     
     preds = model.predict(test_df[feats])
     limit = test_df["TC_DANGKY"].to_numpy()
@@ -147,6 +151,7 @@ def test_lgb(params: Dict[str, Any],
              test_df: pd.DataFrame, 
              feats: List[str], 
              target_col: str,
+             save_dir: str,
              model_type: str,
              approach_type: str = "Credits") -> np.ndarray:
     print(f"Testing LightGBM {model_type} - Mode: {approach_type}...")
@@ -165,7 +170,7 @@ def test_lgb(params: Dict[str, Any],
         eval_metric="rmse"
     )
     
-    _save_model(model.booster_, f"lgbm_{model_type.lower()}", "txt")
+    _save_model(model.booster_, f"lgbm_{model_type.lower()}", save_dir,"txt")
     
     preds = model.predict(test_df[feats])
     limit = test_df["TC_DANGKY"].to_numpy()
