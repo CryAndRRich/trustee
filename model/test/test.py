@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
 
-from model import get_pred
+from utils import get_pred
 
 
 def _calculate_scaled_estimators(best_iter: int, 

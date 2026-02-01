@@ -11,7 +11,7 @@ from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor, early_stopping, log_evaluation
 
-from model import get_pred
+from utils import get_pred
 
 
 def train_dt(params: Dict[str, Any], 

@@ -3,6 +3,20 @@ from typing import Union, List
 import numpy as np
 import pandas as pd
 
+
+def get_pred(preds: np.ndarray, 
+             limit: np.ndarray, 
+             approach_type: str) -> np.ndarray:
+    if approach_type == "Credits":
+        final_preds = preds
+    if approach_type == "Gap":
+        final_preds = limit - preds
+    elif approach_type == "Ratio":
+        final_preds = limit * preds
+
+    return np.clip(final_preds, 0, limit)
+
+
 def save_predictions(test_fresh: pd.DataFrame,
                      test_senior: pd.DataFrame,
                      preds_fresh: Union[np.ndarray, List[float]],

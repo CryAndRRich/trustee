@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 import optuna
 
 from config import CONFIG_MODEL
-from model import get_pred
+from utils import get_pred
 
 def get_optuna_xgb_params(trial: optuna.Trial) -> Dict[str, Any]:
     params = {
