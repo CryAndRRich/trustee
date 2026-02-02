@@ -43,11 +43,12 @@ def explain_model_lime(model_path: str,
 
     model = load_model(model_path)
 
-    if isinstance(model, lgb.Booster):
-        y_pred = model.predict(X_val.values)
-    else:
-        y_pred = model.predict(X_val.values).flatten()
+    def predict_fn(data_numpy):
+        if isinstance(model, lgb.Booster):
+            return model.predict(data_numpy)
+        return model.predict(data_numpy).flatten()
 
+    y_pred = predict_fn(X_val.values)
     y_pred = get_pred(y_pred, val_df["TC_DANGKY"].to_numpy(), approach_type)
     errors = np.abs(y_true - y_pred)
     
