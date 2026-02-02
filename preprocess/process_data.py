@@ -78,10 +78,30 @@ def get_data(admission_path: str,
         by=["MA_SO_SV", "HOC_KY", "TC_DANGKY", "TC_HOANTHANH", "GPA"],
         ascending=[True, True, True, False, False]
     )
+
+    # Kiểm tra trùng lặp học kỳ
+    # duplicate_mask = student_df.duplicated(subset=["MA_SO_SV", "HOC_KY"], keep=False)
+    # duplicates_df = student_df[duplicate_mask].copy()
+    # print(f"Tổng số sinh viên có kết quả bị trùng lặp: {len(duplicates_df["MA_SO_SV"].unique())}")
+    # print(duplicates_df["HOC_KY"].value_counts())
+    
+    # Giữ lại bản ghi kết quả học tập tốt hơn
     student_df = student_df.drop_duplicates(subset=["MA_SO_SV", "HOC_KY"], keep="first")
 
     # Sắp xếp lại theo thời gian để tính các feature dạng Time-series
     student_df = student_df.sort_values(["MA_SO_SV", "SEMESTER_INDEX"]).reset_index(drop=True)
+
+    # Kiểm tra ngắt quãng học kỳ
+    # check_gap_df = student_df.copy()
+    # check_gap_df["GAP"] = check_gap_df.groupby("MA_SO_SV")["SEMESTER_INDEX"].diff()
+    # gap_mask = check_gap_df["GAP"] > 1
+    # students_with_gaps = check_gap_df.loc[gap_mask, "MA_SO_SV"].unique()
+
+    # print(f"Tổng số sinh viên bị ngắt quãng học kỳ: {len(students_with_gaps)}")
+    # if len(students_with_gaps) > 0:
+    #     sample_sv = students_with_gaps[0]
+    #     print(f"\nThông tin chi tiết cho SV {sample_sv}")
+    #     print(student_df[student_df["MA_SO_SV"] == sample_sv][["MA_SO_SV", "HOC_KY", "SEMESTER_INDEX"]].sort_values("SEMESTER_INDEX"))
 
     # Chia tách Train/Validation dựa trên học kỳ
     valid_semesters = ["HK2 2023-2024"]
