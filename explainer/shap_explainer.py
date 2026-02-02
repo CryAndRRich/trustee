@@ -9,13 +9,14 @@ import matplotlib.pyplot as plt
 import shap
 import lightgbm as lgb
 
-from utils import load_model
+from utils import load_model, get_pred
 
 def explain_model_shap(model_path: str, 
                        data_path: str, 
                        feats: List[str], 
                        target_col: str = "TC_HOANTHANH", 
-                       top_n: int = 7) -> Tuple[pd.DataFrame, shap.Explanation]:
+                       top_n: int = 7,
+                       approach_type: str = "Credits") -> Tuple[pd.DataFrame, shap.Explanation]:
     """
     Phân tích và giải thích mô hình sử dụng thư viện SHAP
     
@@ -30,6 +31,7 @@ def explain_model_shap(model_path: str,
         feats: Danh sách các features đầu vào
         target_col: Tên cột mục tiêu
         top_n: Số lượng feature hàng đầu muốn hiển thị trên biểu đồ
+        approach_type: Phương pháp tiếp cận ("Credits", "Gap", "Ratio")
 
     Trả về:
         Tuple[pd.DataFrame, shap.Explanation]: 
@@ -49,7 +51,7 @@ def explain_model_shap(model_path: str,
         if y_pred.ndim > 1:
             y_pred = y_pred.flatten()
     
-    # Tính sai số tuyệt đối
+    y_pred = get_pred(y_pred, df["TC_DANGKY"].to_numpy(), approach_type)
     errors = np.abs(y_true - y_pred)
     df_res = df.copy()
     df_res["pred"] = y_pred

@@ -8,15 +8,16 @@ import pandas as pd
 import lightgbm as lgb
 import dice_ml
 
-from utils import load_model
+from utils import load_model, get_pred
 
 
-def explain_model_dice( model_path: str, 
+def explain_model_dice(model_path: str, 
                        train_path: str, 
                        val_path: str, 
                        feats: List[str], 
                        target_col: str = "TC_HOANTHANH", 
-                       total_CFs: int = 5) -> Any:
+                       total_CFs: int = 5,
+                       approach_type: str = "Credits") -> Any:
     """
     Tạo các phản ví dụ (Counterfactual Explanations) sử dụng thư viện DiCE.
     Giúp trả lời: "Cần thay đổi gì để đạt được kết quả mong muốn?"
@@ -29,7 +30,7 @@ def explain_model_dice( model_path: str,
         target_col: Tên cột mục tiêu
         total_CFs: Số lượng phương án gợi ý muốn tạo ra
         desired_range: Khoảng giá trị mục tiêu mong muốn [min, max]
-            - VD: [15, 30] tín chỉ. Nếu None, mặc định lấy [Mean, Max] của tập train.
+        approach_type: Phương pháp tiếp cận ("Credits", "Gap", "Ratio")
 
     Trả về:
         dice_exp: Đối tượng kết quả của DiCE
@@ -57,7 +58,8 @@ def explain_model_dice( model_path: str,
         y_pred = model.predict(X_val)
     else:
         y_pred = model.predict(X_val).flatten()
-        
+    
+    y_pred = get_pred(y_pred, val_df["TC_DANGKY"].to_numpy(), approach_type)
     worst_idx = np.argmin(y_pred)
     mssv_worst = val_df.iloc[worst_idx]["MA_SO_SV"]
     

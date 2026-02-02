@@ -10,14 +10,15 @@ import lightgbm as lgb
 from lime import lime_tabular
 
 from config import CONFIG_MODEL
-from utils import load_model
+from utils import load_model, get_pred
 
 def explain_model_lime(model_path: str, 
                        train_path: str,
                        val_path: str,
                        feats: List[str], 
                        target_col: str = "TC_HOANTHANH",
-                       top_n: int = 7) -> np.ndarray:
+                       top_n: int = 7,
+                       approach_type: str = "Credits") -> np.ndarray:
     """
     Giải thích mô hình cục bộ sử dụng thư viện LIME. LIME tạo ra một mô hình tuyến tính 
     đơn giản xung quanh điểm dữ liệu cần giải thích để xấp xỉ hành vi của mô hình
@@ -29,7 +30,7 @@ def explain_model_lime(model_path: str,
         feats: Danh sách các features đầu vào
         target_col: Tên cột mục tiêu
         top_n: Số lượng feature hàng đầu muốn hiển thị trên biểu đồ
-
+        approach_type: Phương pháp tiếp cận ("Credits", "Gap", "Ratio")
     Trả về:
         np.ndarray: Mảng chứa sai số tuyệt đối của tập validation
     """
@@ -47,6 +48,7 @@ def explain_model_lime(model_path: str,
     else:
         y_pred = model.predict(X_val.values).flatten()
 
+    y_pred = get_pred(y_pred, val_df["TC_DANGKY"].to_numpy(), approach_type)
     errors = np.abs(y_true - y_pred)
     
     idx_sorted = errors.argsort()
