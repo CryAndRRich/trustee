@@ -72,32 +72,50 @@ def explain_model_shap(model_path: str,
     y_true_subset = y_true[selected_indices]
     
     try:
-        # Ưu tiên dùng TreeExplainer (nhanh và chính xác cho cây quyết định)
+        # print("Attempting to use TreeExplainer...")
         booster = model.get_booster() if hasattr(model, "get_booster") else model
-        explainer = shap.TreeExplainer(booster)
+        
+        # Thử ép kiểu model_output="raw" để tránh lỗi parse base_score đôi khi gặp phải
+        explainer = shap.TreeExplainer(booster, data=X_subset, model_output="raw")
         shap_values = explainer.shap_values(X_subset)
         expected_value = explainer.expected_value
+        
     except Exception as e:
-        # Fallback sang KernelExplainer nếu model lạ
-        print(f"TreeExplainer failed ({e}), falling back to KernelExplainer...")
-        # Sử dụng KMeans để tóm tắt dữ liệu giúp tăng tốc
-        background_data = shap.kmeans(X, 10)
-        explainer = shap.KernelExplainer(model.predict if not isinstance(model, lgb.Booster) else model.predict, background_data)
-        shap_values = explainer.shap_values(X_subset, nsamples=500)
+        # print(f"TreeExplainer failed ({e}). Falling back to KernelExplainer...")
+        
+        # Sử dụng KMeans để tóm tắt dữ liệu nền (giảm tải tính toán)
+        # Convert sang numpy để tránh cảnh báo feature names
+        background_data = shap.kmeans(X.values, 10) 
+        
+        if isinstance(model, lgb.Booster):
+            predict_fn = lambda x: model.predict(x)
+        else:
+            predict_fn = lambda x: model.predict(x)
+
+        explainer = shap.KernelExplainer(predict_fn, background_data)
+        
+        # KernelExplainer rất chậm, ta giới hạn nsamples
+        shap_values = explainer.shap_values(X_subset, nsamples=200) # Giảm nsamples nếu quá chậm
         expected_value = explainer.expected_value
 
-    # Chuẩn hóa định dạng output của SHAP
+    # KernelExplainer thường trả về list nếu là regression
     if isinstance(shap_values, list): 
         shap_values = shap_values[0]
+    
+    # Kiểm tra chiều dữ liệu
     if len(shap_values.shape) == 3: 
-        shap_values = shap_values.mean(axis=2)
-    if isinstance(expected_value, (list, np.ndarray)): 
-        expected_value = expected_value[0]
+        shap_values = shap_values.mean(axis=2) 
+        
+    if isinstance(expected_value, (list, np.ndarray)):
+        if len(np.atleast_1d(expected_value)) > 1:
+            expected_value = expected_value[0]
+        else:
+            expected_value = float(expected_value)
 
-    # Tạo đối tượng Explanation để dùng cho các hàm plot của SHAP
+    # Tạo đối tượng Explanation
     exp = shap.Explanation(
-        values=shap_values.astype(float),
-        base_values=float(expected_value),
+        values=shap_values,
+        base_values=expected_value,
         data=X_subset.values,
         feature_names=feats
     )
