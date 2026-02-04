@@ -1,3 +1,7 @@
 __pycache__
 
 .DS_Store
+
+data/DATA 
+data/DATA_PROCESSED
+data/data_for_scripts.zip

@@ -5,6 +5,8 @@ Chúng tôi sử dụng thư viện **Optuna** (với thuật toán TPE và cơ 
 * **Mục tiêu tối ưu (Objective):** Tối thiểu hóa *Root Mean Squared Error (RMSE)* trên tập kiểm định (Validation Set).
 * **Tính tái lập (Reproducibility):** Toàn bộ quá trình thử nghiệm được cố định với random_seed=42.
 
+**Lưu ý**: Thời gian chạy được đề cập trong file này là ước tính khi chạy trên Kaggle. Thời gian thực tế khi chạy có thể thay đổi, nhưng không vượt quá 1.5 lần thời gian ước tính.
+
 ## 1. Decision Tree Regressor
 Quá trình dò tìm tham số cho mô hình Cây quyết định được thực hiện với **300 trials** (lần thử nghiệm). Thời gian tối ưu trung bình khoảng **4.76 phút**.
 
