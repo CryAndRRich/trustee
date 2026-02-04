@@ -6,11 +6,11 @@ Do tính bảo mật của bộ dữ liệu của cuộc thi, các scripts muố
 
 ![Step 1.1](../report/img/step_1_1_kaggle.jpg)
 
-- Bấm "Browse Files" và tìm trong thư mục trustee, file data/data_for_scripts.zip là file chứa dữ liệu để chạy notebook. File zip này là file nén hai thư mục data/DATA và data/DATA_PROCESSED.
+- Bấm "Browse Files" và tìm trong thư mục trustee, file data/data_for_scripts.zip là file chứa dữ liệu để chạy notebook. File zip này là file nén ba thư mục data/DATA, data/DATA_PROCESSED và data/weights.
 
 ![Step 1.2](../report/img/step_1_2_kaggle.jpg)
 
-- Thực hiện đặt tên Datasets là "DF2026-HD4K" (**Bắt buộc**) và bấm "Create", việc này sẽ tốn khoảng 30-40 giây. Sau khi hoàn thành thì tắt tab này đi.
+- Thực hiện đặt tên Datasets là "DF2026-HD4K" (**Bắt buộc**) và bấm "Create", việc này sẽ tốn khoảng 2-3 phút. Sau khi hoàn thành thì tắt tab này đi.
 
 ![Step 1.3](../report/img/step_1_3_kaggle.jpg)
 

@@ -11,7 +11,7 @@ Do tính bảo mật của bộ dữ liệu của cuộc thi, các scripts muố
 
 ![Step 2.1](../report/img/step_2_1_colab.jpg)
 
-- Tìm trong thư mục trustee, file data/data_for_scripts.zip là file chứa dữ liệu để chạy notebook. File zip này là file nén hai thư mục data/DATA và data/DATA_PROCESSED.
+- Tìm trong thư mục trustee, file data/data_for_scripts.zip là file chứa dữ liệu để chạy notebook. File zip này là file nén ba thư mục data/DATA, data/DATA_PROCESSED và data/weights.
 
 ![Step 2.2](../report/img/step_2_2_colab.jpg)
 
