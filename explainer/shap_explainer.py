@@ -95,7 +95,7 @@ def explain_model_shap(model_path: str,
         explainer = shap.KernelExplainer(predict_fn, background_data)
         
         # KernelExplainer rất chậm, ta giới hạn nsamples
-        shap_values = explainer.shap_values(X_subset, nsamples=200) # Giảm nsamples nếu quá chậm
+        shap_values = explainer.shap_values(X_subset, nsamples=100)
         expected_value = explainer.expected_value
 
     # KernelExplainer thường trả về list nếu là regression
